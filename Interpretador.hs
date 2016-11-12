@@ -1,11 +1,8 @@
-import System.IO
-import System.IO.Unsafe
+module Interpretador(
+interpretar
+)where
 
-import AnalisadorLexico
+import Data.List
 
-principal :: String -> [String]
-principal fn =  analisadorLexico(unsafePerformIO (leia fn))
-
-leia fn = do x <- openFile fn ReadMode
-             y <- hGetContents x
-             return (words y)
+interpretar :: [String] -> [String]
+interpretar fn = fn
