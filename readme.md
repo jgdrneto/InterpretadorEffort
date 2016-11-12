@@ -24,7 +24,7 @@ Projeto final da disciplina de Linguagem de programação: Conceitos e paradigma
 
 Digite o seguinte comando para carregar o interpretador e seus respectivos módulos:  **ghci Principal.hs**
 
-Para insterpretar o arquivo, após ter carregado o interpretador, use o seguinte comando: **load "nomeDoArquivo.eff"**. No qual nomeDoArquivo representa o nome do arquivo e ".eff" a extensao do arquivo.
+Para interpretar um arquivo, após ter carregado o interpretador no passo anterior, use o seguinte comando: **load "nomeDoArquivo.eff"**. No qual nomeDoArquivo representa o nome do arquivo e ".eff" a extensao do arquivo.
 
 
 

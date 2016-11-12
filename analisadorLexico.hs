@@ -1,12 +1,9 @@
-import System.IO
-import System.IO.Unsafe
+module AnalisadorLexico(
+analisadorLexico
+)where
+
 import Data.List.Split
 import Data.List
-import Data.Array
-import Data.Ix
- 
-principal :: String -> [String]
-principal fn =  analisadorLexico(unsafePerformIO (leia fn))
 
 anaLex2Op1:: String  -> [String]
 anaLex2Op1 s = split (onSublist "!=") s
@@ -37,6 +34,3 @@ analisadorLexico:: [String] -> [String]
 analisadorLexico [] = []
 analisadorLexico (cab:cal) = retirarStringVazia(anaLex1Op (anaLex2Op4 (anaLex2Op3 (anaLex2Op2 (anaLex2Op1 cab))))) ++ analisadorLexico cal 
 
-leia fn = do x <- openFile fn ReadMode
-             y <- hGetContents x
-             return (words y)
