@@ -1,28 +1,54 @@
 module Tipos(
-
+Nome(..),
+Escopo(..),
+Simbolo(..),
+TabelaDeSimbolos(..),
+Valor(..),
+Tipo(..),
+getValorPolinomio,
+getValorMatriz,
+getValorChar,
+getValorString,
+getValorBool,
+getValorFloat,
+getValorInt,
+getValorDouble
 )where
 
 import Data.List
 import Data.Array
-import Data.Ix
 
--- Definindo tipos primitivos na nossa linguagem 
-type Matriz = Array(Int,Int) Tipo
-type Polinomio = Array Int Numero
-type NULL = String
+data Valor = Polinomio_v (Array Int Double) | Matriz_v (Array (Int,Int) Double) | Char_v Char | String_v String | Bool_v Bool | Int_v Int | Double_v Double | Float_v Float | NULL deriving (Eq,Show)
 
---Todos os tipos primitivos da nossa linguagem
-data Tipo = Numero | Char | Matriz | Polinomio
-data Numero = Int | Float | Double
+data Simbolo =  Simbolo{nome::Nome,tipo::Tipo,valor::Valor,escopo::Escopo} deriving (Eq,Show)
 
---Definindo valores dos tipos
-data Valor = StringV String | IntV Int | FloatV Float | DoubleV Double | CharV Char | MatrizV Matriz Int Int Tipo | PolinomioV Polinomio Int Numero | NULLV NULL 
-
---Construindo tabela de símbolos
 type Nome = String
 type Escopo = String
-type Simbolo = (Nome, Tipo, [Valor], Escopo)
+
+data Tipo = Int | Float | Double | Matriz | Polinomio | Char | Bool | String | SEMTIPO deriving (Eq,Show)
+
 type TabelaDeSimbolos = [Simbolo]
 
+getValorPolinomio::Valor -> (Array Int Double)
+getValorPolinomio (Polinomio_v valor) = valor
 
+getValorMatriz::Valor-> (Array (Int,Int) Double)
+getValorMatriz (Matriz_v valor) = valor
 
+getValorChar::Valor -> Char
+getValorChar (Char_v valor) = valor
+
+getValorString::Valor -> String
+getValorString (String_v valor) = valor
+
+getValorBool::Valor -> Bool
+getValorBool (Bool_v valor) = valor
+
+getValorInt::Valor -> Int
+getValorInt (Int_v valor) = valor
+
+getValorFloat::Valor -> Float
+getValorFloat (Float_v valor) = valor
+
+getValorDouble::Valor -> Double
+getValorDouble (Double_v valor) = valor

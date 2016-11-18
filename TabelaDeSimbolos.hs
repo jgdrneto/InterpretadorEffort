@@ -2,48 +2,72 @@ module TabelaDeSimbolos(
 
 )where
 
+import Data.Array
+
 import Tipos
 
-criarSimbolo:: Tipos.Nome -> [Valor] -> Tipo -> Escopo -> Simbolo
-criarSimbolo (nome,valor,tipo,escopo) = (nome,valor,tipo,escopo)
+criarVariavelComValor:: Nome -> Tipo -> Valor -> Escopo -> Simbolo
+criarVariavelComValor nome Int valor escopo  =  Simbolo nome Int valor escopo 
+criarVariavelComValor nome Float valor escopo  = Simbolo nome Float valor escopo
+criarVariavelComValor nome Double valor escopo  = Simbolo nome Double valor escopo
+criarVariavelComValor nome Tipos.Char valor escopo  = Simbolo nome Tipos.Char valor escopo
+criarVariavelComValor nome Tipos.String valor escopo  = Simbolo nome Tipos.String valor escopo
+criarVariavelComValor nome Bool valor escopo  = Simbolo nome Bool valor escopo
+criarVariavelComValor nome Polinomio valor escopo  = Simbolo nome Polinomio valor escopo
+criarVariavelComValor nome Matriz valor escopo = Simbolo nome Matriz valor escopo
 
-inserirSimbolo:: TabelaDeSimbolos -> Simbolo -> TabelaDeSimbolos
-inserirSimbolo ([],s) = s:[]
-inserirSimbolo (tbs,()) = tbs 
-inserirSimbolo (tbs,simbolo) = if (procurarSimbolo tbs simbolo == ()) then tbs:simbolo
-							   else tbs	
+criarVariavelSemValor:: Nome -> Tipo -> Escopo -> Simbolo
+criarVariavelSemValor nome Int escopo = Simbolo nome Int NULL escopo 
+criarVariavelSemValor nome Float escopo  = Simbolo nome Float NULL escopo 
+criarVariavelSemValor nome Double escopo  = Simbolo nome Double NULL escopo 
+criarVariavelSemValor nome Tipos.Char escopo  = Simbolo nome Tipos.Char NULL escopo 
+criarVariavelSemValor nome Tipos.String escopo  = Simbolo nome Tipos.String NULL escopo 
+criarVariavelSemValor nome Bool escopo  = Simbolo nome Bool NULL escopo
+criarVariavelSemValor nome Polinomio escopo  = Simbolo nome Polinomio NULL escopo
+criarVariavelSemValor nome Matriz escopo = Simbolo nome Matriz NULL escopo
 
-excluirSimbolo:: TabelaDeSimbolos -> Simbolo -> TabelaDeSimbolos
-excluirSimbolo([],simbolo) = []
-excluirSimbolo(tbs,()) = tbs
-excluirSimbolo(cbtbs:caldatbs,simbolo) = if(fst simbolo == fst cbtbs) then caldatbs
-										 else  cbtbs:excluirSimbolo caldatbs simbolo
+inserirVariavel:: TabelaDeSimbolos -> Simbolo -> TabelaDeSimbolos
+inserirVariavel [] s = s:[] 
+inserirVariavel tbs simbolo = tbs++(simbolo:[])
 
-procurarSimbolo:: TabelaDeSimbolos -> Simbolo -> Simbolo
-procurarSimbolo([],()) = ()
-procurarSimbolo([], s) = ()
-procurarSimbolo(tbs,()) = ()
-procurarSimbolo(cbtbs:caldatbs,simbolo) = if(fst simbolo == fst cbtbs) then cbtbs
-										  else  cbtbs:procurarSimbolo caldatbs simbolo
+buscarValor::TabelaDeSimbolos -> Nome -> Valor
+buscarValor [] _ = NULL
+buscarValor tbs "" = NULL
+buscarValor (cab:cald) n = if(n == nome cab) then valor cab  
+                           else buscarValor cald n
 
-existeSimbolo:: TabelaDeSimbolos -> Simbolo -> Bool
-existeSimbolo([], s) = False
-existeSimbolo(tbs,()) = False
-existeSimbolo(cbtbs:caldatbs,simbolo) = if(fst simbolo == fst cbtbs) then True
-										else existeSimbolo caldatbs simbolo
+buscarTipo::TabelaDeSimbolos -> Nome -> Tipo
+buscarTipo [] _ = SEMTIPO
+buscarTipo tbs "" = SEMTIPO
+buscarTipo (cab:cald) n = if(n == nome cab) then tipo cab  
+                          else buscarTipo cald n
 
-procurarSimboloPorNome:: TabelaDeSimbolos -> Nome -> Simbolo
-procurarSimboloPorNome([],"") = ()
-procurarSimboloPorNome(tbs,"") = ()
-procurarSimboloPorNome([],s) = ()
-procurarSimboloPorNome(cbtbs:caldatbs,simbolo) = if(fst simbolo == fst cbtbs) then cbtbs
-												 else procurarSimboloPorNome caldatbs simbolo
+buscarEscopo::TabelaDeSimbolos -> Nome -> Escopo
+buscarEscopo [] _ = "Nulo"
+buscarEscopo tbs "" = "Nulo"
+buscarEscopo (cab:cald) n = if(n == nome cab) then escopo cab  
+                            else buscarEscopo cald n
 
-procurarValorPorNome:: TabelaDeSimbolos -> Nome -> Valor 
-procurarValorPorNome([],nome) = []
-procurarValorPorNome(tbs,"") = []
-procurarValorPorNome(tbs, nome) = procurarSimboloPorNome(tbs,nome)
+excluirPorNome::TabelaDeSimbolos -> Nome -> TabelaDeSimbolos
+excluirPorNome [] _ = []
+excluirPorNome tab "" = tab
+excluirPorNome (cab:cal) n = if (n == nome cab) then cal
+                              else cab:excluirPorNome cal n
 
+existeVariavel::TabelaDeSimbolos -> Nome -> Bool
+existeVariavel [] _ = False
+existeVariavel tab "" = False
+existeVariavel (cab:cal) n = if (n == nome cab) then True
+                             else existeVariavel cal n
 
-procurarValorNoSimbolo:: Simbolo -> Nome -> Valor
-procurarValorNoSimbolo((),"") = NULL
+valoresCompativeis::TabelaDeSimbolos -> Nome -> Nome -> Bool
+valoresCompativeis [] _ _ = False
+valoresCompativeis tab "" _ = False
+valoresCompativeis tab _ "" = False
+valoresCompativeis tab n1 n2 = buscarTipo tab n1 == buscarTipo tab n2
+
+excluirPorEscopo::TabelaDeSimbolos -> Escopo -> TabelaDeSimbolos
+excluirPorEscopo [] _ = []
+excluirPorEscopo tab "" = tab
+excluirPorEscopo (cab:cal) e = if(e==escopo cab) then excluirPorEscopo cal e
+                            else cab:excluirPorEscopo cal e 
