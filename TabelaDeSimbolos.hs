@@ -1,5 +1,13 @@
 module TabelaDeSimbolos(
-
+criarVariavelSemValor,
+criarVariavelComValor,
+inserirVariavel,
+buscarValor,
+buscarTipo,
+excluirPorNome,
+existeVariavel,
+valoresCompativeis,
+excluirPorEscopo
 )where
 
 import Data.Array

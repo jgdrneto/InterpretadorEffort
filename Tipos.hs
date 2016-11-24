@@ -5,6 +5,7 @@ Simbolo(..),
 TabelaDeSimbolos(..),
 Valor(..),
 Tipo(..),
+Comandos(..),
 getValorPolinomio,
 getValorMatriz,
 getValorChar,
@@ -12,7 +13,8 @@ getValorString,
 getValorBool,
 getValorFloat,
 getValorInt,
-getValorDouble
+getValorDouble,
+conversorStringParaTipo
 )where
 
 import Data.List
@@ -24,6 +26,7 @@ data Simbolo =  Simbolo{nome::Nome,tipo::Tipo,valor::Valor,escopo::Escopo} deriv
 
 type Nome = String
 type Escopo = String
+type Comandos = [String]
 
 data Tipo = Int | Float | Double | Matriz | Polinomio | Char | Bool | String | SEMTIPO deriving (Eq,Show)
 
@@ -52,3 +55,15 @@ getValorFloat (Float_v valor) = valor
 
 getValorDouble::Valor -> Double
 getValorDouble (Double_v valor) = valor
+
+conversorStringParaTipo :: String -> Tipo
+conversorStringParaTipo "" = SEMTIPO
+conversorStringParaTipo tipo = case tipo of
+                               "Int" -> Int
+                               "Float" -> Float
+                               "Double" -> Double
+                               "Matriz" -> Matriz
+                               "Polinomio" -> Polinomio
+                               "Char" -> Char
+                               "Bool" -> Bool
+                               "String"-> String

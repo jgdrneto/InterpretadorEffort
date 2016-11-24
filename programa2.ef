@@ -1,0 +1,27 @@
+int main(){
+	
+	let x : int;
+	let somas : int[4];
+
+	read(x);
+	
+	while(x>0){
+		
+		if(x>0 && x<=25)
+			somas[0]++;
+		elsif(x>=26 && x<=50)
+			somas[1]++;
+		elsif(x>=51 && x<=75)
+			somas[2]++;
+		elsif(x>=76 && x<=100)
+			somas[3]++;
+		else
+			print("Numero Invalido");
+
+		read(x);
+	}
+
+	print(somas);
+
+	return 0;
+}
