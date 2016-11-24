@@ -6,6 +6,7 @@ import Data.List
 import TabelaDeSimbolos
 import AvaliadorExpressoes
 import Tipos
+import System.IO.Unsafe
 
 interpretar :: Comandos -> (Bool,Comandos)
 interpretar (cab:cal) = if(cab /= "Int") then (False, cal) 
@@ -32,7 +33,8 @@ comandos :: Comandos -> TabelaDeSimbolos ->  (Bool,Comandos)
 comandos [] _= (False,[])
 comandos (cab:cal) tbs = case cab of
                          "let" -> atribuicao cal tbs
-                         "print" -> (True,cal)
+                         "print" -> unsafePerformIO (imprimir cal tbs)
+
                        --"while" ->	repeticao cal tbs
                        --"if" -> condicional cal tbs
                         --impressao cal tbs
@@ -41,6 +43,12 @@ comandos (cab:cal) tbs = case cab of
                        --
                        --"ggg" -> (False,cal)
 --repeticao :: Comandos ->
+
+imprimir :: Comandos -> TabelaDeSimbolos -> IO (Bool,Comandos)
+imprimir [] _ = return (False,[])
+imprimir cmd tbs = do
+                      print tbs
+                      return (True, cmd)  
 
 atribuicao :: Comandos -> TabelaDeSimbolos ->(Bool,Comandos)
 atribuicao [] _ = (False,[])
