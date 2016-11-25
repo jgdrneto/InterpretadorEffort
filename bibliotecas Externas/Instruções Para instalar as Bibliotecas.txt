@@ -1,0 +1,17 @@
+Instruções de instalação das bibliotecas loop-0.3.0 e matrix-0.3.5
+
+1º Descompactar ambas as bibliotecas
+
+2º Executar os comandos abaixo dentro da pasta descompactada do loop=0.3.0 com o terminal com permissão de administrador:
+
+Windows:
+	1 - runhaskell Setup configure 
+	2 - runhaskell Setup build
+	3 - runhaskell Setup install
+
+Unix(OSX) e Linux
+	1 - runhaskell Setup configure 
+	2 - runhaskell Setup build
+	3 - sudo runhaskell Setup install
+
+Instalada a biblioteca loop-0.3.0, repita os mesmos comandos para instalar a biblioteca matrix-0.3.5 (OBS: Executar os próximos comandos na pasta descompactada de matrix-0.3.5) de acordo com seu sistema operacional (Windows ou UNIX(OSX) ou Linux)
