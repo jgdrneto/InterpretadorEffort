@@ -1,7 +1,7 @@
-int main(){
+Int main(){
 	
-	let x : int;
-	let somas : int[4];
+	let x : Int;
+	let somas : Int[4];
 
 	read(x);
 	

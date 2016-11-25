@@ -101,8 +101,7 @@ declaracao (nome:cal) tbs = if (cal == []) then (False,cal)
 
 
 declaracaoSemValor :: Nome -> Tipo -> Escopo -> TabelaDeSimbolos -> Comandos -> (Bool,Comandos)
-declaracaoSemValor nome tipo escopo tbs (cab:cal) = if(cab/= ";") then (False,cal)
-                                                    else comandos cal (tbs ++ [criarVariavelSemValor nome tipo escopo])
+declaracaoSemValor nome tipo escopo tbs (cab:cal) = comandos (cab:cal) (tbs ++ [criarVariavelSemValor nome tipo escopo])
 
 declaracaoComValor :: Nome -> Tipo -> Escopo -> TabelaDeSimbolos -> Comandos -> (Bool,Comandos)
 declaracaoComValor "" _ _ _ cs = (False,cs)
