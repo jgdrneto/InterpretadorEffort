@@ -1,7 +1,7 @@
 int main(){
 
-	let a : Matriz [3][3];
-	let b : Matriz [3][3];
+	let a : Matriz;
+	let b : Matriz;
 	
 	read(a);
 	read(b);

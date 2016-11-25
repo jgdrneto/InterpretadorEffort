@@ -73,7 +73,7 @@ impressao (cab:cal) tbs = if(cab /= "(") then (False, cal)
                           else comandos cal3 tbs  
 
 imprimir :: Valor -> IO Bool
-imprimir NULL = return False
+imprimir ERRO = return False
 imprimir (Int_v i) = do
                        print i
                        return True  

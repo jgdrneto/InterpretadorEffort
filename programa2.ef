@@ -7,17 +7,20 @@ int main(){
 	
 	while(x>0){
 		
-		if(x>0 && x<=25)
+		if(x>0 && x<=25){
 			somas[0]++;
-		elsif(x>=26 && x<=50)
+		}else{
+			if(x>=26 && x<=50){
 			somas[1]++;
-		elsif(x>=51 && x<=75)
-			somas[2]++;
-		elsif(x>=76 && x<=100)
-			somas[3]++;
-		else
-			print("Numero Invalido");
-
+		}else{
+			if(x>=51 && x<=75){
+				somas[2]++;
+			}else{
+				if(x>=76 && x<=100){
+					somas[3]++;
+				}
+			}
+		}		
 		read(x);
 	}
 

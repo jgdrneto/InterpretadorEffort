@@ -19,8 +19,9 @@ conversorStringParaTipo
 
 import Data.List
 import Data.Array
+import Data.Matrix
 
-data Valor = Polinomio_v (Array Int Double) | Matriz_v (Array (Int,Int) Double) | Char_v Char | String_v String | Bool_v Bool | Int_v Int | Double_v Double | Float_v Float | NULL deriving (Eq,Ord,Show)
+data Valor = Polinomio_v (Array Int Double) | Matriz_v (Matrix Double) | Char_v Char | String_v String | Bool_v Bool | Int_v Int | Double_v Double | Float_v Float | NULL | ERRO deriving (Eq,Show)
 
 data Simbolo =  Simbolo{nome::Nome,tipo::Tipo,valor::Valor,escopo::Escopo} deriving (Eq,Show)
 
@@ -36,9 +37,9 @@ getValorPolinomio::Valor -> (Array Int Double)
 getValorPolinomio (Polinomio_v valor) = valor
 --getValorPolinomio _ = Array (1,1) [(1,0)]
 
-getValorMatriz::Valor-> (Array (Int,Int) Double)
+getValorMatriz::Valor-> Matrix Double
 getValorMatriz (Matriz_v valor) = valor
---getValorMatriz _ = Array ((1,1),(1,1)) [((1,1),0)]
+getValorMatriz _ = zero 1 1
 
 getValorChar::Valor -> Char
 getValorChar (Char_v valor) = valor
