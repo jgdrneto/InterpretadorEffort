@@ -5,7 +5,7 @@ Int main(){
 	let y : Float = 20;
 	let c : Int = 5;
 	
-	print(x*x - a + c);
+	print(x*x - y + c);
 
 	return 0;
 }
