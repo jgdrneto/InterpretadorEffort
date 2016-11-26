@@ -44,7 +44,7 @@ buscarValor tbs "" _ = NULL
 buscarValor tbs _ "" = NULL
 buscarValor (cab:cald) n e = if(n == nome cab && e == escopo cab) then valor cab  
                              else buscarValor cald n e
-
+                             
 buscarTipo::TabelaDeSimbolos -> Nome -> Escopo -> Tipo
 buscarTipo [] _ _ = SEMTIPO
 buscarTipo tbs "" _ = SEMTIPO

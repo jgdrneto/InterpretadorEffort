@@ -5,16 +5,17 @@ obterValor
 import Tipos
 import TabelaDeSimbolos
 import Data.Array
+import System.IO
 import System.IO.Unsafe
 import Data.Matrix
 
 obterValor:: Comandos -> TabelaDeSimbolos -> (Valor,Comandos)
 obterValor [] _ = (ERRO,[])
-obterValor _ [] = (ERRO,[])
 obterValor cmds tbs = calcularExpressao NULL cmds tbs 
 
 
 calcularExpressao :: Valor -> Comandos -> TabelaDeSimbolos -> (Valor,Comandos)
+calcularExpressao _ [] _ = (ERRO,[])
 calcularExpressao ERRO cmds _ = (ERRO,cmds)
 calcularExpressao NULL (cab:cal) tbs = calcularExpressao (buscarValor tbs cab "main") cal tbs
 calcularExpressao (Int_v v) (cab:cal) tbs =  case cab of
@@ -38,6 +39,7 @@ calcularExpressao (Bool_v b) (cab:cal) tbs =  case cab of
                                              "&&" ->  operadorEE (Bool_v b) cal tbs--soma valor cal tbs
                                              ")" -> ((Bool_v b),cal)
                                              _ -> (ERRO,cal)
+calcularExpressao _ (cab:cal) tbs = (ERRO,(cab:cal))
 
 imprimirConsole:: Valor -> Int -> String -> Comandos -> TabelaDeSimbolos -> IO (Valor,Comandos)  
 imprimirConsole _ _ _[] _ = return (NULL,[])
