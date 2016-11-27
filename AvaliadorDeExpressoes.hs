@@ -81,7 +81,7 @@ menorIgual (Int_v v) (cab:cal) tbs = let x = (v <= (read cab ::Int)) in
 multiplicacao :: Valor -> Comandos -> TabelaDeSimbolos ->(Valor,Comandos)
 multiplicacao _ [] _ = (NULL,[])
 multiplicacao (Matriz_v m) (cab:cal) tbs = let n = getValorMatriz(buscarValor tbs cab "main") in
-                                           if (nrows m /= ncols n ) then calcularExpressao (unsafePerformIO(erroMulMatriz)) cal tbs
+                                           if (ncols m /= nrows n ) then calcularExpressao (unsafePerformIO(erroMulMatriz)) cal tbs
                                            else calcularExpressao (Matriz_v (m*n)) cal tbs
 multiplicacao (Float_v f) (cab:cal) tbs = let x = getValorFloat (buscarValor tbs cab "main") in
                                           if(cal==[]) then (ERRO,cal)
@@ -105,12 +105,12 @@ subtracao (Float_v f) (cab:cal) tbs = let x = getValorFloat (buscarValor tbs cab
 
 erroMulMatriz:: IO(Valor)
 erroMulMatriz = do
-                  print("ERRO: Número de linhas diferente do número de colunas")
+                  putStrLn "ERRO: Número de linhas diferente do número de colunas"
                   return ERRO  
       
 erroSomaMatriz:: IO(Valor)
 erroSomaMatriz = do
-                  print("ERRO: Número de linhas ou número de colunas distintos")
+                  putStrLn "ERRO: Número de linhas ou número de colunas distintos"
                   return ERRO  
 
 eOperadorLogico :: String -> Bool

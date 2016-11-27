@@ -1,6 +1,5 @@
 module Interpretador(
 interpretar,
-criarlista,
 inserirValores
 )where
 
@@ -62,8 +61,8 @@ readVar (cab:cal) tbs =  if (cab/="(") then (False,cal)
                       else if(cal2==[]) then (False,cal2)
                       else
                       let (cab3:cal3) = cal2 in  
-                      if(cab3/=")") then (False,"Erro":cal3)
-                      else if(cal3 == []) then (False,"Erro2":cal3)
+                      if(cab3/=")") then (False,cal3)
+                      else if(cal3 == []) then (False,cal3)
                       else  
                       let (cab4:cal4) = cal3 in
                       if (cab4 /= ";") then (False,cal4)   --modificado aqui
@@ -94,26 +93,11 @@ printValores l c v tbs cmds = do
 readEspecifico :: Comandos -> TabelaDeSimbolos -> Tipo -> Nome -> Escopo ->(Bool,Comandos)
 readEspecifico [] _ _ _ _= (False, [])
 readEspecifico cmds [] _ _ _ = (False, cmds)
-readEspecifico cmds tbs Matriz nome escopo = definirValores cmds (excluirPorNome tbs nome escopo) Matriz nome escopo 
-                                             
-                                             --let (qLinhas,qColunas) = unsafePerformIO conseguirValores in
-                                             --let valores = definirValores (qLinhas*qColunas) qLinhas qColunas [] in 
-                                             --(True,cmds)
-                                             --unsafePerformIO ( printValores qLinhas qColunas (qLinhas*qColunas) tbs cmds )
-                                             --comandos cmds (ntbs ++ [(criarVariavelComValor nome Matriz (Matriz_v (fromList qLinhas qColunas valores)) escopo)]) 
-definirValores :: Comandos -> TabelaDeSimbolos -> Tipo -> Nome -> Escopo ->(Bool,Comandos)
-definirValores [] _ _ _ _= (False, [])
-definirValores cmds [] _ _ _ = (False, cmds)
-definirValores cmds tbs Matriz nome escopo = definirElementos cmds tbs Matriz nome escopo (unsafeDupablePerformIO conseguirValores)
-
-definirElementos:: Comandos -> TabelaDeSimbolos -> Tipo -> Nome -> Escopo -> (Int,Int) ->(Bool,Comandos)
-definirElementos [] _ _ _ _ _ = (False, [])
-definirElementos cmds [] _ _ _ _= (False, cmds)
-definirElementos cmds tbs Matriz nome escopo (lns,cls) = unsafePerformIO( imprimirLinhaColuna cmds tbs Matriz nome escopo lns cls) 
-  --comandos cmds (tbs ++ [(criarVariavelComValor nome Matriz (Matriz_v (fromList lns cls (unsafePerformIO(inserirValores (lns*cls) [])))) escopo)])
-  --definirConteudo cmds tbs Matriz nome escopo lns cls (unsafePerformIO((inserirValores (criarlista (lns*cls)))))
-  --comandos cmds (tbs ++ [(criarVariavelComValor nome Matriz (Matriz_v (fromList lns cls (unsafePerformIO((inserirValores (criarlista (lns*cls) lns cls )))))) escopo)])
-  --comandos cmds (tbs ++ [(criarVariavelComValor nome Matriz (Matriz_v (fromList lns cls list)) escopo)])
+readEspecifico cmds tbs Matriz nome escopo = let (l,c) = unsafePerformIO conseguirValores in
+                                             let valores = (unsafePerformIO(inserirValores 0 l c [])) in
+                                             let ntbs = (excluirPorNome tbs nome escopo) in
+                                             let matriz = unsafePerformIO (imprimirMatriz (fromList l c valores) valores) in
+                                             comandos cmds (ntbs ++ [(criarVariavelComValor nome Matriz (Matriz_v matriz) escopo)]) 
 
 definirConteudo:: Comandos -> TabelaDeSimbolos  ->Tipo -> Nome -> Escopo -> Int -> Int -> [Double] -> (Bool,Comandos)
 definirConteudo [] _ _ _ _ _ _ _ = (False,[])
@@ -129,42 +113,23 @@ conseguirValores = do
                    let c = read linhas::Int 
                    return (l,c)
 
-imprimirLinhaColuna::Comandos -> TabelaDeSimbolos -> Tipo -> Nome -> Escopo -> Int -> Int ->IO(Bool,Comandos)
-imprimirLinhaColuna cmds tbs tipo nome escopo l c = do
-                                                        putStrLn ("Linhas: " ++ show l)
-                                                        putStrLn ("Colunas: "++ show c)
-                                                        return (unsafePerformIO(imprimirMatriz cmds tbs Matriz nome escopo l c (unsafePerformIO(inserirValores (l*c) [])))) --(definirConteudo cmds tbs tipo nome escopo l c (inserirValores (l*c) []))
+imprimirMatriz:: Matrix Double -> [Double] -> IO(Matrix Double)
+imprimirMatriz m vls= do
+                        print m
+                        return m
 
-imprimirMatriz:: Comandos -> TabelaDeSimbolos -> Tipo -> Nome -> Escopo -> Int -> Int -> [Double] ->IO(Bool,Comandos)
-imprimirMatriz cmds tbs tipo nome escopo l c lv = do  
-                                                      putStrLn ""
-                                                      print lv
-                                                      print "Matriz"
-                                                      print (fromList l c lv)
-                                                      return (definirConteudo cmds tbs Matriz nome escopo l c lv)
-criarlista :: Int -> [Double]
-criarlista 0  = []
-criarlista v = 0.0 : criarlista (v-2)
-
-inserirValores::Int -> [Double] -> IO[Double]
-inserirValores v d =  do
-                        if (v == length d) then return d
-                        else do
-                               valor <- definirValorMatriz
-                               return (unsafePerformIO(inserirValores v (d++[valor])))
-
-imp:: Matrix Double -> Int -> Int -> IO[Double]
-imp v l c = do
-              print v
-              print l
-              print c
-              return [] 
+inserirValores::Int -> Int -> Int ->  [Double] -> IO[Double]
+inserirValores v l c d =  do
+                            if ((l*c) == length d) then return d
+                            else do
+                            let valor = definirLinhaColunaMatriz v l c
+                            return (unsafePerformIO(inserirValores (v+1) l c (d++[valor])))
 
 definirLinhaColunaMatriz:: Int -> Int -> Int -> Double
 definirLinhaColunaMatriz _ 0 _ = 0.0
 definirLinhaColunaMatriz _ _ 0 = 0.0
-definirLinhaColunaMatriz v l c = let ln = ((modulo (l*c - v) l 0) + 1) in
-                                 let cl = ((modulo (l*c - v) c 0) + 1) in
+definirLinhaColunaMatriz v l c = let ln = (divisao v l)+1 in
+                                 let cl = (modulo v l)+1 in
                                  if (cl==0 || ln==0) then 0.0
                                  else unsafePerformIO (definirValorMatriz2 ln cl)
 
@@ -175,9 +140,13 @@ definirValorMatriz = do
                        let v = read numero::Double
                        return v 
 
-modulo:: Int -> Int -> Int -> Int 
-modulo n1 n2 r = if(n1<n2) then r
-                 else modulo (n1-n2) n2 (r+1) 
+modulo:: Int -> Int -> Int 
+modulo n1 n2 = if(n1<n2) then n1
+               else modulo (n1-n2) n2 
+
+divisao::Int -> Int -> Int
+divisao n1 n2 = if (n1 < n2) then 0
+                else 1 + divisao (n1-n2) n2
 
 definirValorMatriz2::Int -> Int -> IO(Double)
 definirValorMatriz2 l c = do
