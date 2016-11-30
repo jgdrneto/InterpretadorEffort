@@ -77,19 +77,6 @@ printTabela cmds tbs Matriz nome escopo = do
                                             print escopo 
                                             return (comandos cmds tbs)
 
-printValores:: Int -> Int -> Int -> TabelaDeSimbolos -> Comandos -> IO (Bool,Comandos)
-printValores _ _ _ [] cmds = return (False, cmds) 
-printValores l c v tbs cmds = do
-                                print l
-                                putStrLn "---"
-                                print c
-                                putStrLn "---"
-                                print v
-                                putStrLn "---"
-                                print tbs
-                                putStrLn "---"
-                                print cmds
-                                return (False, cmds)  
 readEspecifico :: Comandos -> TabelaDeSimbolos -> Tipo -> Nome -> Escopo ->(Bool,Comandos)
 readEspecifico [] _ _ _ _= (False, [])
 readEspecifico cmds [] _ _ _ = (False, cmds)
@@ -128,8 +115,8 @@ inserirValores v l c d =  do
 definirLinhaColunaMatriz:: Int -> Int -> Int -> Double
 definirLinhaColunaMatriz _ 0 _ = 0.0
 definirLinhaColunaMatriz _ _ 0 = 0.0
-definirLinhaColunaMatriz v l c = let ln = (divisao v l)+1 in
-                                 let cl = (modulo v l)+1 in
+definirLinhaColunaMatriz v l c = let ln = (divisao v c)+1 in
+                                 let cl = (modulo v c)+1 in
                                  if (cl==0 || ln==0) then 0.0
                                  else unsafePerformIO (definirValorMatriz2 ln cl)
 

@@ -13,7 +13,6 @@ obterValor:: Comandos -> TabelaDeSimbolos -> (Valor,Comandos)
 obterValor [] _ = (ERRO,[])
 obterValor cmds tbs = calcularExpressao NULL cmds tbs 
 
-
 calcularExpressao :: Valor -> Comandos -> TabelaDeSimbolos -> (Valor,Comandos)
 calcularExpressao _ [] _ = (ERRO,[])
 calcularExpressao ERRO cmds _ = (ERRO,cmds)
@@ -25,18 +24,18 @@ calcularExpressao (Int_v v) (cab:cal) tbs =  case cab of
                                              ")" -> ((Int_v v),cal)
                                              _ -> (ERRO,cal)                                       
 calcularExpressao (Float_v f) (cab:cal) tbs =  case cab of
-                                             "+" ->  soma (Float_v f) cal tbs--soma valor cal tbs
-                                             "-" ->  subtracao (Float_v f) cal tbs --unsafePerformIO (imprimirConsole (Float_v f) cal tbs) --
-                                             "*" ->  multiplicacao (Float_v f) cal tbs--multiplicacao valor cal tbs
+                                             "+" ->  soma (Float_v f) cal tbs
+                                             "-" ->  subtracao (Float_v f) cal tbs 
+                                             "*" ->  multiplicacao (Float_v f) cal tbs
                                              ")" -> ((Float_v f),cal)
                                              _ -> (ERRO,cal)
 calcularExpressao (Matriz_v m) (cab:cal) tbs =  case cab of
-                                             "+" -> soma (Matriz_v m) cal tbs--soma valor cal tbs
-                                             "*" -> multiplicacao (Matriz_v m) cal tbs--multiplicacao valor cal tbs
+                                             "+" -> soma (Matriz_v m) cal tbs
+                                             "*" -> multiplicacao (Matriz_v m) cal tbs
                                              ")" -> ((Matriz_v m),cal)
                                              _ -> (ERRO,cal)
 calcularExpressao (Bool_v b) (cab:cal) tbs =  case cab of
-                                             "&&" ->  operadorEE (Bool_v b) cal tbs--soma valor cal tbs
+                                             "&&" ->  operadorEE (Bool_v b) cal tbs
                                              ")" -> ((Bool_v b),cal)
                                              _ -> (ERRO,cal)
 calcularExpressao _ (cab:cal) tbs = (ERRO,(cab:cal))
