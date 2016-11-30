@@ -104,12 +104,12 @@ subtracao (Float_v f) (cab:cal) tbs = let x = getValorFloat (buscarValor tbs cab
 
 erroMulMatriz:: IO(Valor)
 erroMulMatriz = do
-                  putStrLn "ERRO: Número de linhas diferente do número de colunas"
+                  putStrLn "ERRO MULTIPLICAO: Número de linhas diferente do número de colunas"
                   return ERRO  
       
 erroSomaMatriz:: IO(Valor)
 erroSomaMatriz = do
-                  putStrLn "ERRO: Número de linhas ou número de colunas distintos"
+                  putStrLn "ERRO SOMA: Número de linhas ou número de colunas distintos"
                   return ERRO  
 
 eOperadorLogico :: String -> Bool
